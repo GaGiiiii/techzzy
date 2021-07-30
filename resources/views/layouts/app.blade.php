@@ -16,31 +16,22 @@
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    {{ $cssLink ?? "" }}
+    {{ $cssLink ?? '' }}
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
 </head>
 
 <body class="font-sans antialiased">
+
     @include('layouts.navigation')
-    <div class="container-fluid bg-gray-100">
 
-        <!-- Page Heading -->
-        {{-- <header class="bg-white shadow">
-            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                {{ $header }}
-            </div>
-        </header> --}}
-
-        <!-- Page Content -->
+    <!-- Page Content -->
+    <div class="container">
         <main>
             {{ $slot }}
         </main>
     </div>
-
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">

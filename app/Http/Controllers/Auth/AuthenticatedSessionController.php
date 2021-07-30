@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthenticatedSessionController extends Controller {
   /**
@@ -26,10 +27,9 @@ class AuthenticatedSessionController extends Controller {
    */
   public function store(LoginRequest $request) {
     $request->authenticate();
-
     $request->session()->regenerate();
 
-    return redirect()->intended(RouteServiceProvider::HOME);
+    return redirect()->intended(RouteServiceProvider::HOME)->with('login_successful', "Welcome back: " . auth()->user()->username);
   }
 
   /**
@@ -39,12 +39,11 @@ class AuthenticatedSessionController extends Controller {
    * @return \Illuminate\Http\RedirectResponse
    */
   public function destroy(Request $request) {
+    $user = auth()->user();
     Auth::guard('web')->logout();
-
     $request->session()->invalidate();
-
     $request->session()->regenerateToken();
 
-    return redirect('/');
+    return redirect('/')->with('logout_successful', "See you soon: " . $user->username);
   }
 }
