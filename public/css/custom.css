@@ -3,3 +3,8 @@ input[name="img"] {
   box-shadow: none;
   border: none;
 }
+
+.dropdown-menu[data-bs-popper] {
+  left: auto;
+  right: 0;
+}
