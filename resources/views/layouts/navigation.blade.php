@@ -30,6 +30,8 @@
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="{{ url('dashboard') }}">Dashboard</a>
                             <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ url('admin') }}">Admin</a>
+                            <div class="dropdown-divider"></div>
                             <!-- Authentication -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
