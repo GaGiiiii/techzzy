@@ -23,6 +23,10 @@
         <x-alert type="success" :message="session('login_successful')" />
     @endif
 
+    @if (session('register_successful'))
+        <x-alert type="success" :message="session('register_successful')" />
+    @endif
+
     @if (session('unauthorized'))
         <x-alert type="danger" :message="session('unauthorized')" />
     @endif
@@ -37,8 +41,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
-                            <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="Admin"
-                                class="rounded-circle p-1 bg-primary" width="110">
+                            <img src="{{ asset('avatars') }}/{{ auth()->user()->username }}/{{ auth()->user()->img }}"
+                                alt="Admin" class="rounded-circle p-1 bg-primary" width="110">
                             <div class="mt-3">
                                 <h4>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</h4>
                                 <p class="text-secondary mb-1">{{ auth()->user()->username }}</p>
@@ -121,7 +125,8 @@
                                     aria-label="Close"></button>
                             </div>
                         @endif
-                        <form method="POST" action="{{ url('/users/') }}/{{ auth()->user()->id }}">
+                        <form method="POST" enctype="multipart/form-data"
+                            action="{{ url('/users/') }}/{{ auth()->user()->id }}">
                             @csrf
                             @method('PUT')
                             <div class="row mb-3">

@@ -33,10 +33,19 @@ class RegisteredUserController extends Controller {
     $request->validate([
       'first_name' => 'required|string|max:255',
       'last_name' => 'required|string|max:255',
-      'username' => 'required|string|max:255',
+      'username' => 'required|string|max:255|unique:users',
       'email' => 'required|string|email|max:255|unique:users',
       'password' => ['required', 'confirmed', Rules\Password::defaults()],
+      'img' => 'file|image|max:5000'
     ]);
+
+    // CREATE UNIQUE FILENAME AND STORE IT UNIQUE FOLDER
+    if (isset($request->img)) {
+      $fileName = $request->username . "_" . date('dmY_Hs') . "." . $request->img->extension() ?? null;
+      $path = $request->file('img')->storeAs('avatars/' . $request->username, $fileName);
+    } else {
+      $fileName = 'no_image.png';
+    }
 
     $user = User::create([
       'first_name' => $request->first_name,
@@ -44,13 +53,13 @@ class RegisteredUserController extends Controller {
       'username' => $request->username,
       'email' => $request->email,
       'password' => Hash::make($request->password),
-      'img' => "noimage.png",
+      'img' => $fileName,
     ]);
 
     event(new Registered($user));
 
     Auth::login($user);
 
-    return redirect(RouteServiceProvider::HOME);
+    return redirect(RouteServiceProvider::HOME)->with('register_successful', "Welcome: " . auth()->user()->username . ", this is your dashboard page. You can edit your profile data here.");
   }
 }
