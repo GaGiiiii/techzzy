@@ -11,6 +11,9 @@
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
 
+    <!-- FONT AWESOME -->
+    <script src="https://kit.fontawesome.com/5c5689b7a2.js"></script>
+
     {{-- BOOTSTRAP --}}
     <link href="https://bootswatch.com/5/sandstone/bootstrap.min.css" rel="stylesheet">
 
@@ -18,8 +21,12 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     {{ $cssLink ?? '' }}
 
+    <!-- OWL CAROUSEL -->
+    {{ $owlCarouselCSS ?? '' }}
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
+    {{ $jsLink ?? '' }}
 </head>
 
 <body class="font-sans antialiased">
@@ -32,6 +39,9 @@
             {{ $slot }}
         </main>
     </div>
+
+    <!-- OWL CAROUSEL -->
+    {{ $owlCarouselJS ?? '' }}
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
         integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous">
