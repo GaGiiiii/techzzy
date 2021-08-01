@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller {
   /**
@@ -12,14 +13,22 @@ class ProductController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function index() {
-    // $products = DB::select("SELECT *, COUNT(p.id) AS NUM_OF_COMMENTS FROM `products` p JOIN `comments` c ON p.id = c.product_id GROUP BY p.id, c.product_id ORDER BY NUM_OF_COMMENTS");
-    $products = Product::all();
+    $products = Product::all()->take(20);
+
+    // OPTION ONE
     $mostCommentedProductsV = mostCommentedProducts($products);
-    $mostCommentedProductsV = $mostCommentedProductsV->slice(0, 10);
+    $mostCommentedProductsV = $mostCommentedProductsV->slice(0, 20);
+
+    // OPTION TWO
+    $mostLikedProductsV = DB::select("SELECT * FROM `products` p JOIN
+    (SELECT r.product_id, AVG(r.rating) AS RATING FROM `ratings` r GROUP BY r.product_id) t2 ON p.id = t2.product_id ORDER BY t2.RATING DESC");
+
+    $mostLikedProductsV = array_slice($mostLikedProductsV, 0, 20);
 
     return view('index', [
       'products' => $products,
       'mostCommentedProducts' => $mostCommentedProductsV,
+      'mostLikedProducts' => $mostLikedProductsV,
     ]);
   }
 }

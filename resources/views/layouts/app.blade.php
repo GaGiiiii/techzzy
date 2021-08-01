@@ -40,6 +40,8 @@
         </main>
     </div>
 
+    @include('layouts.footer')
+
     <!-- OWL CAROUSEL -->
     {{ $owlCarouselJS ?? '' }}
 

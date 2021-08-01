@@ -15,9 +15,56 @@
     @endif
 
     <div class="row mt-5">
-        <div class="owl-carousel">
+        <h1 style="margin-bottom: 20px; font-size: 1.8rem">Latest Products</h1>
+        <div class="owl-carousel owl-theme owl-latest">
+            @foreach ($products as $product)
+                <div class="col-12">
+                    <div class="card shadow">
+                        <img src="{{ asset('images/no_image.png') }}" class="card-img-top" alt="..."
+                            style="height: 300px">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">{{ $product->name }}</h5>
+                            <p class="fw-bold">
+                                <i class="fas fa-star"></i> {{ calculateRatingForProduct($product) }} / 10
+                            </p>
+                            <p class="fw-bold">
+                                <i class="fas fa-tag"></i> {{ $product->price }} RSD
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <h1 style="margin-bottom: 20px; font-size: 1.8rem">Most Liked Products</h1>
+        <div class="owl-carousel owl-theme owl-likes">
+            @foreach ($mostLikedProducts as $product)
+                <div class="col-12">
+                    <div class="card shadow">
+                        <img src="{{ asset('images/no_image.png') }}" class="card-img-top" alt="..."
+                            style="height: 300px">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">{{ $product->name }}</h5>
+                            <p class="fw-bold">
+                                <i class="fas fa-star"></i> {{ $product->RATING }} / 10
+                            </p>
+                            <p class="fw-bold">
+                                <i class="fas fa-tag"></i> {{ $product->price }} RSD
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <h1 style="margin-bottom: 20px; font-size: 1.8rem">Most Commented Products</h1>
+        <div class="owl-carousel owl-theme owl-comments">
             @foreach ($mostCommentedProducts as $product)
-                <div class="col">
+                <div class="col-12">
                     <div class="card shadow">
                         <img src="{{ asset('images/no_image.png') }}" class="card-img-top" alt="..."
                             style="height: 300px">
