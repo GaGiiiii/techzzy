@@ -20,8 +20,8 @@
             @foreach ($products as $product)
                 <div class="col-12">
                     <div class="card shadow">
-                        <img src="{{ asset('images/no_image.png') }}" class="card-img-top" alt="..."
-                            style="height: 300px">
+                        <img src="{{ $product->img != 'no_image.png' ? $product->img : asset('images/no_image.png') }}"
+                            class="card-img-top" alt="Image Error" style="height: 300px">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">{{ $product->name }}</h5>
                             <p class="fw-bold">
@@ -43,8 +43,8 @@
             @foreach ($mostLikedProducts as $product)
                 <div class="col-12">
                     <div class="card shadow">
-                        <img src="{{ asset('images/no_image.png') }}" class="card-img-top" alt="..."
-                            style="height: 300px">
+                        <img src="{{ $product->img != 'no_image.png' ? $product->img : asset('images/no_image.png') }}"
+                            class="card-img-top" alt="Image Error" style="height: 300px">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">{{ $product->name }}</h5>
                             <p class="fw-bold">
@@ -66,8 +66,8 @@
             @foreach ($mostCommentedProducts as $product)
                 <div class="col-12">
                     <div class="card shadow">
-                        <img src="{{ asset('images/no_image.png') }}" class="card-img-top" alt="..."
-                            style="height: 300px">
+                        <img src="{{ $product->img != 'no_image.png' ? $product->img : asset('images/no_image.png') }}"
+                            class="card-img-top" alt="Image Error" style="height: 300px">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">{{ $product->name }}</h5>
                             <p class="fw-bold">
