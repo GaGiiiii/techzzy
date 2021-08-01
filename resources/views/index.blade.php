@@ -48,7 +48,7 @@
                         <div class="card-body">
                             <h5 class="card-title fw-bold">{{ $product->name }}</h5>
                             <p class="fw-bold">
-                                <i class="fas fa-star"></i> {{ $product->RATING }} / 10
+                                <i class="fas fa-star"></i> {{ round($product->RATING, 2) }} / 10
                             </p>
                             <p class="fw-bold">
                                 <i class="fas fa-tag"></i> {{ $product->price }} RSD
