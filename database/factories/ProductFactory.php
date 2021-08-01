@@ -19,12 +19,15 @@ class ProductFactory extends Factory {
    * @return array
    */
   public function definition() {
+    $categories = Category::all();
+
     return [
       'name' => $this->faker->firstName(),
       'desc' => $this->faker->text(100),
       'img' => 'no_image.png',
       'price' => rand(1000 * 100, 100000 * 100) / 100,
       'stock' => rand(0, 100),
+      'category_id' => $categories[rand(0, sizeof($categories) - 1)],
     ];
   }
 }
