@@ -3,6 +3,17 @@
         <link rel='stylesheet' href='{{ asset('css/show_product.css') }}'>
     </x-slot>
 
+    @if (session('unauthorized'))
+        <x-alert type="danger" :message="session('unauthorized')" />
+    @endif
+
+    @if (session('add_comment_success'))
+        <x-alert type="success" :message="session('add_comment_success')" />
+    @endif
+
+    @if (session('delete_comment_success'))
+        <x-alert type="success" :message="session('delete_comment_success')" />
+    @endif
 
     <div class="row mt-5">
         <div class="col-12 col-sm-6">
@@ -36,7 +47,8 @@
                             </ul>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-outline-primary w-100 fw-bold mt-4">ADD TO CART</button>
+                    <button type="button" {{ $product->stock == 0 ? 'disabled' : '' }}
+                        class="btn btn-outline-primary w-100 fw-bold mt-4">{{ $product->stock == 0 ? 'Not Available' : 'ADD TO CART' }}</button>
                 </div>
             </div>
         </div>
@@ -52,18 +64,32 @@
                             <h5 class="mb-4">No comments.</h5>
                         @endif
                         @auth
+                            @if ($errors->any())
+                                <div class="alert alert-danger mb-4">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="new-comment d-flex">
                                 <div class="comment-img">
                                     <img src="{{ asset('avatars') . '/' . auth()->user()->username . '/' . auth()->user()->img }}"
                                         alt="Image Error">
                                 </div>
                                 <div class="comment-textarea flex-fill">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Leave a comment here"
-                                            id="floatingTextarea2" style="height: 100px"></textarea>
-                                        <label for="floatingTextarea2">Leave your comment</label>
-                                    </div>
-                                    <button class="btn btn-primary mt-3 d-block ms-auto">Submit</button>
+                                    <form action="{{ url('/comments') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                        <div class="form-floating">
+                                            <textarea name="body" class="form-control" placeholder="Leave a comment here"
+                                                id="floatingTextarea2" style="height: 100px">{{ old('body') }}</textarea>
+                                            <label for="floatingTextarea2">Leave your comment</label>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary mt-3 d-block ms-auto">Submit</button>
+                                    </form>
                                 </div>
                             </div>
                         @endauth
@@ -79,6 +105,39 @@
                                         <i class="fas fa-user"></i> {{ $comment->user->username }} &nbsp;
                                         <i class="fas fa-star"></i>
                                         {{ findRatingForProductFromUser($comment->user, $product) }} / 10
+                                        @if (auth()->user() && auth()->user()->id == $comment->user->id)
+                                            <button class="btn btn-sm btn-warning">Edit</button>
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal{{ $comment->id }}">
+                                                DELETE
+                                            </button>
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="exampleModal{{ $comment->id }}" tabindex="-1"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Are you sure
+                                                                that
+                                                                you want to delete this comment?</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form class="d-inline"
+                                                                action="/comments/{{ $comment->id }}" method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button class="btn btn-danger">YES</button>
+                                                            </form>
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">No</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </h5>
                                     <p class="card-text mt-2">{{ $comment->body }}</p>
                                     <p class="mt-3"><i class="fas fa-calendar-alt"></i>

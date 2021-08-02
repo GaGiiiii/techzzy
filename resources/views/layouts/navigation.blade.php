@@ -30,8 +30,9 @@
                 @endguest
                 @auth
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
-                            aria-haspopup="true" aria-expanded="false">{{ Auth::user()->username }}</a>
+                        <a class="nav-link dropdown-toggle {{ str_contains(url()->current(), 'dashboard') ? 'active' : '' }}"
+                            data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                            aria-expanded="false">{{ Auth::user()->username }}</a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="{{ url('dashboard') }}">Dashboard</a>
                             <div class="dropdown-divider"></div>

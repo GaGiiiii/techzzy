@@ -27,7 +27,7 @@ class CommentFactory extends Factory {
     return [
       'product_id' => $products[rand(0, sizeof($products) - 1)],
       'user_id' => $users[rand(0, sizeof($users) - 1)],
-      'body' => $this->faker->text(),
+      'body' => $this->faker->text('1000'),
     ];
   }
 }
