@@ -30,3 +30,17 @@ function calculateRatingForProduct($product) {
 
   return round($total / sizeof($product->ratings), 2);
 }
+
+function formatDate($date) {
+  return date("d/m/Y H:m", strtotime($date));
+}
+
+function findRatingForProductFromUser($user, $product) {
+  foreach ($user->ratings as $rating) {
+    if ($rating->product_id == $product->id) {
+      return $rating->rating;
+    }
+  }
+
+  return 0;
+}

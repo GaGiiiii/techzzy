@@ -22,3 +22,24 @@
   border-top: 1px solid black;
   border-bottom: 1px solid black;
 }
+
+.comments .comment {
+  margin-bottom: 20px;
+  border-bottom: 1px solid black;
+  padding-bottom: 20px;
+}
+
+.comments img {
+  height: 100px;
+  width: 100px;
+}
+
+.comment-img {
+  margin-right: 20px;
+}
+
+.new-comment {
+  border-bottom: 1px solid black;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}

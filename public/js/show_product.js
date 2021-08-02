@@ -3,6 +3,7 @@ let liCurrent = document.querySelector('.li-current');
 let liPlus = document.querySelector('.li-plus');
 let changingQuantitySpan = document.querySelector('.changing-quantity-span');
 let originalPriceSpan = document.querySelector('.original-price-span');
+let originalStockSpan = document.querySelector('.original-stock-span');
 
 liMinus.addEventListener('click', () => {
   let currentQuantity = parseInt(liCurrent.innerHTML);
@@ -25,8 +26,9 @@ liMinus.addEventListener('click', () => {
 
 liPlus.addEventListener('click', () => {
   let currentQuantity = parseInt(liCurrent.innerHTML);
+  let inStock = parseInt(originalStockSpan.innerHTML);
 
-  if (currentQuantity >= 30) {
+  if (currentQuantity >= inStock) {
     return;
   }
 
