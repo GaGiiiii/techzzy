@@ -154168,3 +154168,13 @@ select {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }
+
+.footer {
+  background-color: #3e3f3a;
+  color: white;
+  text-align: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-top: 2rem;
+  font-weight: bold;
+}

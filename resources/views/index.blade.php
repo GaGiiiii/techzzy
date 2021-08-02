@@ -14,74 +14,9 @@
         <x-alert type="success" :message="session('logout_successful')" />
     @endif
 
-    <div class="row mt-5">
-        <h1 style="margin-bottom: 20px; font-size: 1.8rem">Latest Products</h1>
-        <div class="owl-carousel owl-theme owl-latest">
-            @foreach ($products as $product)
-                <div class="col-12">
-                    <div class="card shadow">
-                        <img src="{{ $product->img != 'no_image.png' ? $product->img : asset('images/no_image.png') }}"
-                            class="card-img-top" alt="Image Error" style="height: 300px">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ $product->name }}</h5>
-                            <p class="fw-bold">
-                                <i class="fas fa-star"></i> {{ calculateRatingForProduct($product) }} / 10
-                            </p>
-                            <p class="fw-bold">
-                                <i class="fas fa-tag"></i> {{ $product->price }} RSD
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-
-    <div class="row mt-5">
-        <h1 style="margin-bottom: 20px; font-size: 1.8rem">Most Liked Products</h1>
-        <div class="owl-carousel owl-theme owl-likes">
-            @foreach ($mostLikedProducts as $product)
-                <div class="col-12">
-                    <div class="card shadow">
-                        <img src="{{ $product->img != 'no_image.png' ? $product->img : asset('images/no_image.png') }}"
-                            class="card-img-top" alt="Image Error" style="height: 300px">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ $product->name }}</h5>
-                            <p class="fw-bold">
-                                <i class="fas fa-star"></i> {{ round($product->RATING, 2) }} / 10
-                            </p>
-                            <p class="fw-bold">
-                                <i class="fas fa-tag"></i> {{ $product->price }} RSD
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-
-    <div class="row mt-5">
-        <h1 style="margin-bottom: 20px; font-size: 1.8rem">Most Commented Products</h1>
-        <div class="owl-carousel owl-theme owl-comments">
-            @foreach ($mostCommentedProducts as $product)
-                <div class="col-12">
-                    <div class="card shadow">
-                        <img src="{{ $product->img != 'no_image.png' ? $product->img : asset('images/no_image.png') }}"
-                            class="card-img-top" alt="Image Error" style="height: 300px">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ $product->name }}</h5>
-                            <p class="fw-bold">
-                                <i class="fas fa-star"></i> {{ calculateRatingForProduct($product) }} / 10
-                            </p>
-                            <p class="fw-bold">
-                                <i class="fas fa-tag"></i> {{ $product->price }} RSD
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
+    <x-owl-row type="owl-latest" title="Latest Products" :products="$products" />
+    <x-owl-row type="owl-likes" title="Most Liked Products" :products="$mostLikedProducts" />
+    <x-owl-row type="owl-comments" title="Most Commented Products" :products="$mostCommentedProducts" />
 
     <x-slot name="owlCarouselJS">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

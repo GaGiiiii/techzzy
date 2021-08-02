@@ -31,4 +31,22 @@ class ProductController extends Controller {
       'mostLikedProducts' => $mostLikedProductsV,
     ]);
   }
+
+  /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function show($id) {
+    $product = Product::find($id);
+
+    if (!$product) {
+      abort(404);
+    }
+
+    return view('products.show', [
+      'product' => $product,
+    ]);
+  }
 }

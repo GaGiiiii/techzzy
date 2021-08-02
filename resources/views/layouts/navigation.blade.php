@@ -9,12 +9,13 @@
         <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ url('/') }}">Home
-                        <span class="visually-hidden">(current)</span>
+                    <a class="nav-link {{ url()->current() == url('/') ? 'active' : '' }}"
+                        href="{{ url('/') }}">Home
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url('/') }}">Products
+                    <a class="nav-link {{ str_contains(url()->current(), 'products') ? 'active' : '' }}"
+                        href="{{ url('products') }}">Products
                     </a>
                 </li>
             </ul>

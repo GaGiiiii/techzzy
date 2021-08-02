@@ -27,16 +27,11 @@ input[name="img"] {
   margin-right: .5rem!important;
 }
 
-.footer {
-  background-color: #3e3f3a;
-  color: white;
-  text-align: center;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  margin-top: 2rem;
-  font-weight: bold;
+.product-col {
+  transition: transform .3s ease;
 }
 
-.owl-latest .col-10:last-of-type() {
-  /* margin-left: auto; */
+.product-col:hover {
+  transform: scale(1.05);
+  cursor: pointer;
 }
