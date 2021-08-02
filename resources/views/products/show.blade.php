@@ -11,6 +11,11 @@
         <x-alert type="success" :message="session('add_comment_success')" />
     @endif
 
+
+    @if (session('add_rating_success'))
+        <x-alert type="success" :message="session('add_rating_success')" />
+    @endif
+
     @if (session('delete_comment_success'))
         <x-alert type="success" :message="session('delete_comment_success')" />
     @endif
@@ -32,6 +37,22 @@
                             {{ isset($product->RATING) ? round($product->RATING, 2) : calculateRatingForProduct($product) }}
                             / 10
                         </p>
+                        <div class="custom-rate-div">
+                            <form action="/products/{{ $product->id }}/ratings" method="POST">
+                                @csrf
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                <input type="hidden" name="rating" value="{{ $usersRating }}">
+                            </form>
+                        </div>
                         <p class="fw-bold"><i class="fas fa-tag"></i> <span
                                 class="original-price-span">{{ $product->price }}</span> RSD <span
                                 class="changing-quantity-span"></span></p>
@@ -79,7 +100,8 @@
                                         alt="Image Error">
                                 </div>
                                 <div class="comment-textarea flex-fill">
-                                    <form action="{{ url('/comments') }}" method="POST">
+                                    <form action="{{ url('/products') . '/' . $product->id . '/comments' }}"
+                                        method="POST">
                                         @csrf
                                         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -126,7 +148,8 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <form class="d-inline"
-                                                                action="/comments/{{ $comment->id }}" method="POST">
+                                                                action="{{ url('/products') }}/{{ $product->id }}/comments/{{ $comment->id }}"
+                                                                method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
                                                                 <button class="btn btn-danger">YES</button>

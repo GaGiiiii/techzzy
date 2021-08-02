@@ -45,8 +45,19 @@ class ProductController extends Controller {
       abort(404);
     }
 
+    $usersRating = 0;
+
+    foreach($product->ratings as $rating){
+      if($rating->user_id == auth()->user()->id){
+        $usersRating = $rating->rating;
+
+        break;
+      }
+    }
+
     return view('products.show', [
       'product' => $product,
+      'usersRating' => $usersRating,
     ]);
   }
 }

@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Comment;
 use App\Models\Product;
+use App\Models\Rating;
 use Illuminate\Http\Request;
 
-class CommentController extends Controller {
+class RatingController extends Controller {
   /**
    * Display a listing of the resource.
    *
@@ -31,31 +31,36 @@ class CommentController extends Controller {
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store(Request $request) {
-    if ($request->user_id != auth()->user()->id) {
-      return back()->with('unauthorized', 'Unauthorized access!');
-    }
-
-    $product = Product::find($request->product_id);
+  public function store(Request $request, $product_id) {
+    // IF USER CHANGED URL TO SOMETHING STUPID
+    $product = Product::find($product_id);
 
     if (!$product) {
       return back()->with('unauthorized', 'Unauthorized access!');
     }
 
-    // VALIDATE DATA
-    $validated = $request->validate([
-      'body' => 'required|min:20',
-    ]);
+    // WE NEED TO CHECK IF USER ALREADY RATED CURRENT PRODUCT, IF HE DID, WE NEED TO UPDATE IT 
+    // NOT TO CREATE NEW
+    $rating = Rating::where('user_id', auth()->user()->id)->where('product_id', $product_id)->first();
 
-    $comment = new Comment;
+    if ($rating) {
+      $rating->rating = $request->rating;
+      $rating->save();
 
-    $comment->body = $request->body;
-    $comment->user_id = $request->user_id;
-    $comment->product_id = $request->product_id;
+      return back()->with('add_rating_success', 'Rating sent successfully!');
+    }
 
-    $comment->save();
+    // USER DIDN'T ALREADY RATE THIS PRODUCT SO WE CREATE NEW RATING
+    $ratingSent = $request->rating;
 
-    return back()->with('add_comment_success', 'Comment added successfully!');
+    $rating = new Rating;
+    $rating->user_id = auth()->user()->id;
+    $rating->product_id = $product_id;
+    $rating->rating = $ratingSent;
+
+    $rating->save();
+
+    return back()->with('add_rating_success', 'Rating sent successfully!');
   }
 
   /**
@@ -95,16 +100,7 @@ class CommentController extends Controller {
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy($product_id, $comment_id) {
-    foreach (auth()->user()->comments as $comment) {
-      if ($comment->id == $comment_id) {
-        $comment = Comment::find($comment_id);
-        $comment->delete();
-        
-        return back()->with('delete_comment_success', 'Comment deleted successfully!');
-      }
-    }
-
-    return back()->with('unauthorized', 'Unauthorized access!');
+  public function destroy($id) {
+    //
   }
 }
