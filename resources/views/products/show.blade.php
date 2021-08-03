@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="cssLink">
         <link rel='stylesheet' href='{{ asset('css/show_product.css') }}'>
+        <link rel='stylesheet' href='{{ asset('css/global.css') }}'>
     </x-slot>
 
     @if (session('unauthorized'))
@@ -68,11 +69,17 @@
                             </ul>
                         </div>
                     </div>
-                    <button type="button" {{ $product->stock == 0 ? 'disabled' : '' }}
-                        class="btn btn-outline-primary w-100 fw-bold mt-4">{{ $product->stock == 0 ? 'Not Available' : 'ADD TO CART' }}</button>
+                    <button data-status="{{ $cartForUserForThisProduct == null ? 'add' : 'remove' }}" type="button"
+                        {{ $product->stock == 0 ? 'disabled' : '' }}
+                        class="add-to-cart-btn btn btn-outline-primary w-100 fw-bold mt-4">
+                        {{ ($product->stock == 0 ? 'Not Available' : $cartForUserForThisProduct == null) ? 'ADD TO CART' : 'REMOVE FROM CART' }}
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="crtid" data-crt="{{ $cartForUserForThisProduct == null ? '' : $cartForUserForThisProduct->id }}">
     </div>
 
     <div class="row mt-5">
@@ -176,6 +183,7 @@
 
 
     <x-slot name="jsLink">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
         <script src="{{ asset('js/show_product.js') }}" defer></script>
     </x-slot>
 

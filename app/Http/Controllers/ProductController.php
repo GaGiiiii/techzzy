@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -55,9 +56,12 @@ class ProductController extends Controller {
       }
     }
 
+    $cartForUserForThisProduct = Cart::where('user_id', auth()->user()->id)->where('product_id', $id)->first();
+
     return view('products.show', [
       'product' => $product,
       'usersRating' => $usersRating,
+      'cartForUserForThisProduct' => $cartForUserForThisProduct,
     ]);
   }
 }

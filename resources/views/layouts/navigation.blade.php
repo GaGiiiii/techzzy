@@ -29,6 +29,14 @@
                     </li>
                 @endguest
                 @auth
+                    <li class="nav-item">
+                        <a href="{{ url('cart') }}" class="cart position-relative d-inline-flex">
+                            <i class="fas fa fa-shopping-cart fa-lg"></i>
+                            <span class="cart-basket d-flex align-items-center justify-content-center">
+                                {{ sizeof(auth()->user()->carts) }}
+                            </span>
+                        </a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ str_contains(url()->current(), 'dashboard') ? 'active' : '' }}"
                             data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true"

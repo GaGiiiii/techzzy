@@ -39,7 +39,7 @@ liPlus.addEventListener('click', () => {
 });
 
 
-// RATING
+// RATING ============================================================================================================================
 
 let rateStars = document.querySelectorAll('.rate-star');
 let ratingInput = document.querySelector(`input[name="rating"]`);
@@ -74,3 +74,49 @@ function initStars() {
     rateStars[i].style.color = "rgb(209, 203, 19)";
   }
 }
+
+// ADDING TO CART ============================================================================================================================
+
+let addToCartBtn = document.querySelector('.add-to-cart-btn');
+let cartBasket = document.querySelector('.cart-basket');
+let crtid = document.querySelector('.crtid');
+
+addToCartBtn.addEventListener('click', () => {
+  let status = addToCartBtn.dataset.status; // If attr is data-index-here-comes in JS it will return dataset.indexHereComes
+  let currentQuantity = parseInt(liCurrent.innerHTML);
+  let currentItemsInCart = parseInt(cartBasket.innerHTML);
+
+  let origin = window.location.origin;   // Returns base URL (https://example.com)
+  let url = window.location.href;     // Returns full URL (https://example.com/path/example.html)
+  let product_id = url.substring(url.lastIndexOf('/') + 1);
+
+  switch (status) {
+    case "add":
+      cartBasket.innerHTML = ++currentItemsInCart;
+      addToCartBtn.innerHTML = "REMOVE FROM CART";
+      addToCartBtn.dataset.status = "remove";
+
+      let data = {
+        currentQuantity,
+        product_id,
+      }
+
+      axios.post(origin + "/cart", {
+        data,
+      }).then(res => {
+        crtid.dataset.crt = res.data.id;
+      }).catch(err => console.log(err));
+
+      break;
+    case "remove":
+      cartBasket.innerHTML = --currentItemsInCart;
+      addToCartBtn.innerHTML = "ADD TO CART";
+      addToCartBtn.dataset.status = "add";
+
+      axios.delete(origin + "/cart/" + crtid.dataset.crt).then(res => {
+      }).catch(err => console.log(err));
+
+      break;
+  }
+
+});

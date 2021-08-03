@@ -1,6 +1,7 @@
 <x-app-layout>
     <x-slot name="cssLink">
         <link rel='stylesheet' href='{{ asset('css/custom.css') }}'>
+        <link rel='stylesheet' href='{{ asset('css/global.css') }}'>
     </x-slot>
 
     <x-slot name="owlCarouselCSS">
