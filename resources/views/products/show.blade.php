@@ -63,7 +63,7 @@
                             </div>
                         @endauth
                         <p class="fw-bold"><i class="fas fa-tag"></i> <span
-                                class="original-price-span">{{ $product->price }}</span> RSD <span
+                                class="original-price-span">{{ number_format($product->price, 2) }}</span> RSD <span
                                 class="changing-quantity-span"></span></p>
                         <p class="fw-bold"><i class="fas fa-shopping-cart"></i> In stock: <span
                                 class="original-stock-span">{{ $product->stock }}</span> pcs</p>

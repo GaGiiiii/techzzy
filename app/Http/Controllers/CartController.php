@@ -12,7 +12,17 @@ class CartController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function index() {
-    //
+    $carts = Cart::where('user_id', auth()->user()->id)->get();
+    $totalPrice = 0;
+
+    foreach ($carts as $cart) {
+      $totalPrice += $cart->product->price * $cart->count;
+    }
+
+    return view('cart.index', [
+      'carts' => $carts,
+      'totalPrice' => $totalPrice,
+    ]);
   }
 
   /**
@@ -80,7 +90,11 @@ class CartController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function update(Request $request, $id) {
-    //
+    $cart = Cart::find($id);
+    $cart->count = $request->newQuantity;
+    $cart->save();
+
+    return response($cart);
   }
 
   /**
@@ -94,5 +108,12 @@ class CartController extends Controller {
     $cart->delete();
 
     return response($cart);
+  }
+
+  public function destroy2($id) {
+    $cart = Cart::find($id);
+    $cart->delete();
+
+    return back()->with('delete_cart_success', 'Product removed from cart successfully!');
   }
 }

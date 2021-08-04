@@ -22,8 +22,8 @@ liMinus.addEventListener('click', () => {
     return;
   }
 
-  let originalPrice = parseFloat(originalPriceSpan.innerHTML);
-  changingQuantitySpan.innerHTML = `x${currentQuantity} = ${Math.round((originalPrice * currentQuantity) * 100) / 100} RSD`;
+  let originalPrice = parseFloat(originalPriceSpan.innerHTML.replaceAll(',', ''));
+  changingQuantitySpan.innerHTML = `x${currentQuantity} = ${(Math.round((originalPrice * currentQuantity) * 100) / 100).toLocaleString()} RSD`;
 });
 
 liPlus.addEventListener('click', () => {
@@ -36,8 +36,8 @@ liPlus.addEventListener('click', () => {
 
   liCurrent.innerHTML = ++currentQuantity;
 
-  let originalPrice = parseFloat(originalPriceSpan.innerHTML);
-  changingQuantitySpan.innerHTML = `x${currentQuantity} = ${Math.round((originalPrice * currentQuantity) * 100) / 100} RSD`;
+  let originalPrice = parseFloat(originalPriceSpan.innerHTML.replaceAll(',', ''));
+  changingQuantitySpan.innerHTML = `x${currentQuantity} = ${(Math.round((originalPrice * currentQuantity) * 100) / 100).toLocaleString()} RSD`;
 });
 
 // COMMENT EDIT ====================================================================================================================================
@@ -176,7 +176,7 @@ addToCartBtn.addEventListener('click', () => {
         product_id,
       }
 
-      axios.post(origin + "/cart", {
+      axios.post(origin + "/carts", {
         data,
       }).then(res => {
         crtid.dataset.crt = res.data.id;
@@ -188,7 +188,7 @@ addToCartBtn.addEventListener('click', () => {
       addToCartBtn.innerHTML = "ADD TO CART";
       addToCartBtn.dataset.status = "add";
 
-      axios.delete(origin + "/cart/" + crtid.dataset.crt).then(res => {
+      axios.delete(origin + "/carts/" + crtid.dataset.crt).then(res => {
       }).catch(err => console.log(err));
 
       break;

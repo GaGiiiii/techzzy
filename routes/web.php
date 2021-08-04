@@ -23,9 +23,10 @@ Route::get('/', [ProductController::class, 'index']);
 
 // CART
 Route::get('/cart', [CartController::class, 'index']);
-Route::post('/cart', [CartController::class, 'store']);
-Route::put('/cart/{id}', [CartController::class, 'update']);
-Route::delete('/cart/{id}', [CartController::class, 'destroy']);
+Route::post('/carts', [CartController::class, 'store']);
+Route::put('/carts/{id}', [CartController::class, 'update']);
+Route::delete('/carts/{id}', [CartController::class, 'destroy']);
+Route::delete('/carts2/{id}', [CartController::class, 'destroy2']);
 
 // USERS
 Route::put('/users/{id}', [UserController::class, 'update']);
