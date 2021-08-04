@@ -48,3 +48,7 @@
 .rate-star:hover{
   cursor: pointer;
 }
+
+.comment-alert{
+  display: none;
+}

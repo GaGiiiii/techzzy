@@ -31,23 +31,13 @@ class RatingController extends Controller {
    * @param  \Illuminate\Http\Request  $request
    * @return \Illuminate\Http\Response
    */
-  public function store(Request $request, $product_id) {
+  public function store(Request $request) {
     // IF USER CHANGED URL TO SOMETHING STUPID
+    $product_id = $request->product_id;
     $product = Product::find($product_id);
 
     if (!$product) {
       return back()->with('unauthorized', 'Unauthorized access!');
-    }
-
-    // WE NEED TO CHECK IF USER ALREADY RATED CURRENT PRODUCT, IF HE DID, WE NEED TO UPDATE IT 
-    // NOT TO CREATE NEW
-    $rating = Rating::where('user_id', auth()->user()->id)->where('product_id', $product_id)->first();
-
-    if ($rating) {
-      $rating->rating = $request->rating;
-      $rating->save();
-
-      return back()->with('add_rating_success', 'Rating sent successfully!');
     }
 
     // USER DIDN'T ALREADY RATE THIS PRODUCT SO WE CREATE NEW RATING
@@ -91,7 +81,16 @@ class RatingController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function update(Request $request, $id) {
-    //
+    // WE NEED TO CHECK IF USER ALREADY RATED CURRENT PRODUCT, IF HE DID, WE NEED TO UPDATE IT 
+    // NOT TO CREATE NEW
+    $rating = Rating::find($id);
+
+    if ($rating) {
+      $rating->rating = $request->rating;
+      $rating->save();
+
+      return back()->with('add_rating_success', 'Rating sent successfully!');
+    }
   }
 
   /**

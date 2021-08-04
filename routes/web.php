@@ -21,20 +21,26 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ProductController::class, 'index']);
 
+// CART
 Route::get('/cart', [CartController::class, 'index']);
 Route::post('/cart', [CartController::class, 'store']);
 Route::put('/cart/{id}', [CartController::class, 'update']);
 Route::delete('/cart/{id}', [CartController::class, 'destroy']);
 
+// USERS
 Route::put('/users/{id}', [UserController::class, 'update']);
 
+// PRODUCTS
 Route::get('/products/{id}', [ProductController::class, 'show']);
 
-Route::post('/products/{id}/ratings', [RatingController::class, 'store']);
+// RATINGS
+Route::post('/ratings', [RatingController::class, 'store']);
+Route::put('/ratings/{id}', [RatingController::class, 'update']);
 
-Route::post('/products/{id}/comments', [CommentController::class, 'store']);
-Route::put('/products/{product_id}/comments/{comment_id}', [CommentController::class, 'update']);
-Route::delete('/products/{product_id}/comments/{comment_id}', [CommentController::class, 'destroy']);
+// COMMENTS
+Route::post('/comments', [CommentController::class, 'store']);
+Route::put('/comments/{comment_id}', [CommentController::class, 'update']);
+Route::delete('/comments/{comment_id}', [CommentController::class, 'destroy']);
 
 Route::get('/dashboard', function () {
   return view('dashboard');

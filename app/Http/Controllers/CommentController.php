@@ -86,7 +86,20 @@ class CommentController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function update(Request $request, $id) {
-    //
+    $comment = Comment::find($id);
+
+    if (!$comment) {
+      return back()->with('unauthorized', 'Unauthorized access!');
+    }
+
+    if ($comment->user->id != auth()->user()->id) {
+      return back()->with('unauthorized', 'Unauthorized access!');
+    }
+
+    $comment->body = $request->data;
+    $comment->save();
+
+    return response($comment);
   }
 
   /**
@@ -95,12 +108,12 @@ class CommentController extends Controller {
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
-  public function destroy($product_id, $comment_id) {
+  public function destroy($comment_id) {
     foreach (auth()->user()->comments as $comment) {
       if ($comment->id == $comment_id) {
         $comment = Comment::find($comment_id);
         $comment->delete();
-        
+
         return back()->with('delete_comment_success', 'Comment deleted successfully!');
       }
     }

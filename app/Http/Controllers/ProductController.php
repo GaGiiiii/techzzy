@@ -46,22 +46,25 @@ class ProductController extends Controller {
       abort(404);
     }
 
-    $usersRating = 0;
+    $usersRating = null;
 
-    foreach($product->ratings as $rating){
-      if($rating->user_id == auth()->user()->id){
-        $usersRating = $rating->rating;
+    if (auth()->user()) {
+      foreach ($product->ratings as $rating) {
+        if ($rating->user_id == auth()->user()->id) {
+          $usersRating = $rating;
 
-        break;
+          break;
+        }
       }
+
+      $cartForUserForThisProduct = Cart::where('user_id', auth()->user()->id)->where('product_id', $id)->first();
     }
 
-    $cartForUserForThisProduct = Cart::where('user_id', auth()->user()->id)->where('product_id', $id)->first();
 
     return view('products.show', [
       'product' => $product,
       'usersRating' => $usersRating,
-      'cartForUserForThisProduct' => $cartForUserForThisProduct,
+      'cartForUserForThisProduct' => $cartForUserForThisProduct ?? null,
     ]);
   }
 }

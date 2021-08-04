@@ -1,3 +1,5 @@
+let origin = window.location.origin;   // Returns base URL (https://example.com)
+
 let liMinus = document.querySelector('.li-minus');
 let liCurrent = document.querySelector('.li-current');
 let liPlus = document.querySelector('.li-plus');
@@ -37,6 +39,80 @@ liPlus.addEventListener('click', () => {
   let originalPrice = parseFloat(originalPriceSpan.innerHTML);
   changingQuantitySpan.innerHTML = `x${currentQuantity} = ${Math.round((originalPrice * currentQuantity) * 100) / 100} RSD`;
 });
+
+// COMMENT EDIT ====================================================================================================================================
+
+let editBtns = document.querySelectorAll('.edit-comment-btn');
+let currentEditP = null; // Currently editing paragraph
+let lastEditP = null; // Last editing paragraph
+let lastEditBtn = null; // Last edit button clicked
+
+editBtns.forEach(editBtn => {
+  editBtn.addEventListener('click', () => {
+    let commentID = editBtn.dataset.commentId;
+    let commentBodyP = document.querySelector('.comment-body-p-' + commentID);
+
+    lastEditP = currentEditP;
+    currentEditP = commentBodyP;
+
+    lastEditBtn = editBtn;
+
+    if (editBtn.innerHTML == "SAVE") {
+      updateComment(commentID, commentBodyP.innerHTML, editBtn, currentEditP);
+
+      return;
+    }
+
+    commentBodyP.contentEditable = true;
+    commentBodyP.focus();
+    editBtn.innerHTML = "SAVE";
+  });
+});
+
+// WE NEED TO CHECK IF USER CLICKED OUTSIDE THE EDITING PARAGRAPH
+window.addEventListener('click', (e) => {
+  if (currentEditP) {
+    if (!currentEditP.contains(e.target)) { // We clicked outside !!!!!!!!!!!!!!!!!!!
+      if (!e.target.classList.contains('edit-comment-btn')) { // We clicked on something that isn't edit button
+        if (lastEditBtn.innerHTML == "SAVE") {
+          updateComment(currentEditP.dataset.commentId, currentEditP.innerHTML, lastEditBtn, currentEditP);
+          currentEditP = null;
+        }
+      } else {
+        // USER CLICKED ON SOME EDIT BUTTON WE NEED TO CHECK WHICH ONE
+        let editButtonID = e.target.dataset.commentId;
+
+        if (lastEditP) {
+          let lastEditPID = lastEditP.dataset.commentId;
+
+          if (lastEditPID != editButtonID) { // Kliknuo sam edit pa odmah posle toga drugi edit
+            lastEditP.contentEditable = false;
+            updateComment(lastEditPID, lastEditP.innerHTML, document.querySelector(`button[data-comment-id="${lastEditPID}"]`), lastEditP);
+          }
+        }
+      }
+    }
+  }
+});
+
+function updateComment(commentID, data, commentBtn, commentP) {
+  if(data.trim().length < 20){
+    alert("Please enter at least 20 characters.");
+    commentBtn.innerHTML = "EDIT";
+    commentP.contentEditable = false;
+
+    return;
+  }
+
+  commentBtn.innerHTML = "EDIT";
+  commentP.contentEditable = false;
+
+  axios.put(`${origin}/comments/${commentID}`, {
+    data,
+  }).then(res => {
+    document.querySelector(`div[data-comment-id="${commentID}"]`).style.display = 'block';
+  }).catch(err => console.log(err));
+}
 
 
 // RATING ============================================================================================================================
@@ -86,7 +162,6 @@ addToCartBtn.addEventListener('click', () => {
   let currentQuantity = parseInt(liCurrent.innerHTML);
   let currentItemsInCart = parseInt(cartBasket.innerHTML);
 
-  let origin = window.location.origin;   // Returns base URL (https://example.com)
   let url = window.location.href;     // Returns full URL (https://example.com/path/example.html)
   let product_id = url.substring(url.lastIndexOf('/') + 1);
 

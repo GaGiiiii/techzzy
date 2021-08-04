@@ -38,22 +38,30 @@
                             {{ isset($product->RATING) ? round($product->RATING, 2) : calculateRatingForProduct($product) }}
                             / 10
                         </p>
-                        <div class="custom-rate-div">
-                            <form action="/products/{{ $product->id }}/ratings" method="POST">
-                                @csrf
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <button type="submit"><i class="fas fa-star rate-star"></i></button>
-                                <input type="hidden" name="rating" value="{{ $usersRating }}">
-                            </form>
-                        </div>
+                        @auth
+                            <div class="custom-rate-div">
+                                <form
+                                    action="{{ $usersRating == null ? url('/ratings') : url('/ratings') . '/' . $usersRating->id }}"
+                                    method="POST">
+                                    @csrf
+                                    @if ($usersRating != null)
+                                        @method("PUT")
+                                    @endif
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <button type="submit"><i class="fas fa-star rate-star"></i></button>
+                                    <input type="hidden" name="rating" value="{{ $usersRating->rating ?? 0 }}">
+                                    <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                </form>
+                            </div>
+                        @endauth
                         <p class="fw-bold"><i class="fas fa-tag"></i> <span
                                 class="original-price-span">{{ $product->price }}</span> RSD <span
                                 class="changing-quantity-span"></span></p>
@@ -107,8 +115,7 @@
                                         alt="Image Error">
                                 </div>
                                 <div class="comment-textarea flex-fill">
-                                    <form action="{{ url('/products') . '/' . $product->id . '/comments' }}"
-                                        method="POST">
+                                    <form action="{{ url('/comments') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
                                         <input type="hidden" name="product_id" value="{{ $product->id }}">
@@ -129,13 +136,21 @@
                                         alt="Image Error">
                                 </div>
 
-                                <div class="comment-body">
+                                <div class="comment-body flex-fill">
+                                    <div data-comment-id="{{ $comment->id }}"
+                                        class="alert alert-success alert-dismissible fade show comment-alert"
+                                        role="alert">
+                                        Comment updated successfully. :)
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
                                     <h5>
                                         <i class="fas fa-user"></i> {{ $comment->user->username }} &nbsp;
                                         <i class="fas fa-star"></i>
                                         {{ findRatingForProductFromUser($comment->user, $product) }} / 10
                                         @if (auth()->user() && auth()->user()->id == $comment->user->id)
-                                            <button class="btn btn-sm btn-warning">Edit</button>
+                                            <button data-comment-id="{{ $comment->id }}"
+                                                class="btn btn-sm btn-warning edit-comment-btn">Edit</button>
                                             <!-- Button trigger modal -->
                                             <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#exampleModal{{ $comment->id }}">
@@ -155,7 +170,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <form class="d-inline"
-                                                                action="{{ url('/products') }}/{{ $product->id }}/comments/{{ $comment->id }}"
+                                                                action="{{ url('/comments') }}/{{ $comment->id }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -169,7 +184,10 @@
                                             </div>
                                         @endif
                                     </h5>
-                                    <p class="card-text mt-2">{{ $comment->body }}</p>
+                                    <p data-comment-id="{{ $comment->id }}"
+                                        class="card-text mt-2 comment-body-p-{{ $comment->id }}">
+                                        {{ $comment->body }}
+                                    </p>
                                     <p class="mt-3"><i class="fas fa-calendar-alt"></i>
                                         {{ formatDate($comment->created_at) }}h</p>
                                 </div>
