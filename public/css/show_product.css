@@ -49,6 +49,10 @@
   cursor: pointer;
 }
 
-.comment-alert{
+/* .comment-alert{
   display: none;
+} */
+
+.comment-body-p-focus:focus{
+  padding: 15px;
 }

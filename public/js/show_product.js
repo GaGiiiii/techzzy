@@ -44,18 +44,15 @@ liPlus.addEventListener('click', () => {
 
 let editBtns = document.querySelectorAll('.edit-comment-btn');
 let currentEditP = null; // Currently editing paragraph
-let lastEditP = null; // Last editing paragraph
-let lastEditBtn = null; // Last edit button clicked
+let currentEditBtn = null; // Currently editing paragraph
 
 editBtns.forEach(editBtn => {
   editBtn.addEventListener('click', () => {
     let commentID = editBtn.dataset.commentId;
     let commentBodyP = document.querySelector('.comment-body-p-' + commentID);
 
-    lastEditP = currentEditP;
     currentEditP = commentBodyP;
-
-    lastEditBtn = editBtn;
+    currentEditBtn = editBtn;
 
     if (editBtn.innerHTML == "SAVE") {
       updateComment(commentID, commentBodyP.innerHTML, editBtn, currentEditP);
@@ -70,47 +67,50 @@ editBtns.forEach(editBtn => {
 });
 
 // WE NEED TO CHECK IF USER CLICKED OUTSIDE THE EDITING PARAGRAPH
-window.addEventListener('click', (e) => {
-  if (currentEditP) {
-    if (!currentEditP.contains(e.target)) { // We clicked outside !!!!!!!!!!!!!!!!!!!
-      if (!e.target.classList.contains('edit-comment-btn')) { // We clicked on something that isn't edit button
-        if (lastEditBtn.innerHTML == "SAVE") {
-          updateComment(currentEditP.dataset.commentId, currentEditP.innerHTML, lastEditBtn, currentEditP);
-          currentEditP = null;
-        }
-      } else {
-        // USER CLICKED ON SOME EDIT BUTTON WE NEED TO CHECK WHICH ONE
-        let editButtonID = e.target.dataset.commentId;
-
-        if (lastEditP) {
-          let lastEditPID = lastEditP.dataset.commentId;
-
-          if (lastEditPID != editButtonID) { // Kliknuo sam edit pa odmah posle toga drugi edit
-            lastEditP.contentEditable = false;
-            updateComment(lastEditPID, lastEditP.innerHTML, document.querySelector(`button[data-comment-id="${lastEditPID}"]`), lastEditP);
-          }
-        }
-      }
-    }
-  }
-});
+// window.addEventListener('click', (e) => {
+//   if (currentEditP) {
+//     console.log(e.target);
+//     if (!currentEditP.contains(e.target)) { // We clicked outside !!!!!!!!!!!!!!!!!!!
+//       // We clicked on something outside, if that something doesn't have commentId close it
+//       // Or if it has and its different than this, close it.
+//       let hasId = e.target.dataset.commentId;
+//       let hasIdButItsDifferent = e.target.dataset.commentId && e.target.dataset.commentId != currentEditP.dataset.commentId;
+//       console.log(hasId);
+//       console.log(hasIdButItsDifferent)
+//       if (!hasId || hasIdButItsDifferent) {
+//         currentEditBtn.innerHTML = "EDIT";
+//         currentEditP.contentEditable = false;
+//         console.log(currentEditBtn);
+//         console.log(currentEditP)
+//       } else {
+//         // && e.target.dataset.commentId == currentEditP.dataset.commentId
+//         // currentEditBtn.innerHTML = "EDIT";
+//         // currentEditP.contentEditable = false;
+//       }
+//     }
+//   }
+// });
 
 function updateComment(commentID, data, commentBtn, commentP) {
-  if(data.trim().length < 20){
+  commentBtn.innerHTML = "EDIT";
+  commentP.contentEditable = false;
+
+  if (data.trim().length < 20) {
     alert("Please enter at least 20 characters.");
-    commentBtn.innerHTML = "EDIT";
-    commentP.contentEditable = false;
 
     return;
   }
 
-  commentBtn.innerHTML = "EDIT";
-  commentP.contentEditable = false;
-
   axios.put(`${origin}/comments/${commentID}`, {
     data,
   }).then(res => {
-    document.querySelector(`div[data-comment-id="${commentID}"]`).style.display = 'block';
+    let divAlert = document.createElement('div');
+    divAlert.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show', 'comment-alert');
+    divAlert.innerHTML = `Comment updated successfully. :)
+    <button type="button" class="btn-close" data-bs-dismiss="alert"
+        aria-label="Close"></button>`;
+    divAlert.setAttribute("role", "alert");
+    document.querySelector(`div[data-comment-id="${commentID}"].comment-body`).prepend(divAlert);
   }).catch(err => console.log(err));
 }
 

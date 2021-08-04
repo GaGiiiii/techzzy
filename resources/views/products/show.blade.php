@@ -136,14 +136,7 @@
                                         alt="Image Error">
                                 </div>
 
-                                <div class="comment-body flex-fill">
-                                    <div data-comment-id="{{ $comment->id }}"
-                                        class="alert alert-success alert-dismissible fade show comment-alert"
-                                        role="alert">
-                                        Comment updated successfully. :)
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                            aria-label="Close"></button>
-                                    </div>
+                                <div data-comment-id="{{ $comment->id }}" class="comment-body flex-fill">
                                     <h5>
                                         <i class="fas fa-user"></i> {{ $comment->user->username }} &nbsp;
                                         <i class="fas fa-star"></i>
@@ -185,7 +178,7 @@
                                         @endif
                                     </h5>
                                     <p data-comment-id="{{ $comment->id }}"
-                                        class="card-text mt-2 comment-body-p-{{ $comment->id }}">
+                                        class="comment-body-p-focus card-text mt-2 comment-body-p-{{ $comment->id }}">
                                         {{ $comment->body }}
                                     </p>
                                     <p class="mt-3"><i class="fas fa-calendar-alt"></i>
