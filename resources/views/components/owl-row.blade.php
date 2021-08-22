@@ -8,7 +8,7 @@
                         <img src="{{ $product->img != 'no_image.png' ? $product->img : asset('images/no_image.png') }}"
                             class="card-img-top" alt="Image Error" style="height: 300px">
                         <div class="card-body">
-                            <h5 class="card-title fw-bold">{{ $product->name }}</h5>
+                            <h5 class="card-title fw-bold mb-0">{{ $product->name }}</h5>
                             <p class="fw-bold">
                                 <i class="fas fa-star"></i>
                                 {{ isset($product->RATING) ? round($product->RATING, 2) : calculateRatingForProduct($product) }}

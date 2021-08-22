@@ -1,0 +1,1 @@
+let selectSort = document.querySelector(`select[name=sortBy]`);

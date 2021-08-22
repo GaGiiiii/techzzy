@@ -12,7 +12,7 @@
             <div class="card filters shadow">
                 <div id="sort">
                     <h4 class="mb-2">Sort by:</h4>
-                    <select class="form-select ps-2" aria-label="Default select example">
+                    <select class="form-select ps-2" name="sortBy" aria-label="Default select example">
                         <option selected>Name</option>
                         <option value="1">Price desc</option>
                         <option value="2">Price asc</option>
@@ -49,7 +49,8 @@
                                     <img src="{{ $product->img != 'no_image.png' ? $product->img : asset('images/no_image.png') }}"
                                         class="card-img-top" alt="Image Error" style="height: 300px">
                                     <div class="card-body">
-                                        <h5 class="card-title fw-bold">{{ $product->name }}</h5>
+                                        <h5 class="card-title fw-bold mb-0">{{ $product->name }}</h5>
+                                        <h6 class="mb-2">{{ $product->category->name }}</h6>
                                         <p class="fw-bold">
                                             <i class="fas fa-star"></i>
                                             {{ isset($product->RATING) ? round($product->RATING, 2) : calculateRatingForProduct($product) }}
