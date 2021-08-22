@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,21 @@ class ProductController extends Controller {
       'products' => $products,
       'mostCommentedProducts' => $mostCommentedProductsV,
       'mostLikedProducts' => $mostLikedProductsV,
+    ]);
+  }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function index2() {
+    $products = Product::orderBy('name')->paginate(16);
+    $categories = Category::all();
+
+    return view('products.index', [
+      'products' => $products,
+      'categories' => $categories,
     ]);
   }
 

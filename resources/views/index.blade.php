@@ -27,5 +27,4 @@
     <x-slot name="jsLink">
         <script src="{{ asset('js/index.js') }}" defer></script>
     </x-slot>
-
 </x-app-layout>

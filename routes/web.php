@@ -45,6 +45,9 @@ Route::post('/comments', [CommentController::class, 'store']);
 Route::put('/comments/{comment_id}', [CommentController::class, 'update']);
 Route::delete('/comments/{comment_id}', [CommentController::class, 'destroy']);
 
+// PRODUCTS
+Route::get('/products', [ProductController::class, 'index2']);
+
 Route::get('/dashboard', function () {
   return view('dashboard');
 })->middleware(['auth'])->name('dashboard');

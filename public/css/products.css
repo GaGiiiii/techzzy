@@ -1,0 +1,28 @@
+.filters {
+  padding: 15px;
+}
+
+.product-col:nth-of-type(n+5) {
+  margin-top: 20px;
+}
+
+.product-col {
+  transition: transform .2s ease-in-out;
+}
+
+.product-col:hover {
+  transform: scale(1.03);
+}
+
+.pagination {
+  justify-content: center;
+}
+
+#search{
+  margin-left: auto;
+}
+
+#search input{
+  width: 285px;
+  margin-left: auto;
+}
