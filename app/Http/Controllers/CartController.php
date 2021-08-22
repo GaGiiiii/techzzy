@@ -91,6 +91,11 @@ class CartController extends Controller {
    */
   public function update(Request $request, $id) {
     $cart = Cart::find($id);
+
+    if (auth()->user()->cannot('update', $cart)) {
+      return response(['message' => 'Unauthorized access!'], 401);
+    }
+
     $cart->count = $request->newQuantity;
     $cart->save();
 
@@ -105,6 +110,11 @@ class CartController extends Controller {
    */
   public function destroy($id) {
     $cart = Cart::find($id);
+
+    if (auth()->user()->cannot('delete', $cart)) {
+      return response(['message' => 'Unauthorized access!'], 401);
+    }
+
     $cart->delete();
 
     return response($cart);
@@ -112,6 +122,11 @@ class CartController extends Controller {
 
   public function destroy2($id) {
     $cart = Cart::find($id);
+
+    if (auth()->user()->cannot('delete', $cart)) {
+      return back()->with('unauthorized', 'Unauthorized access!');
+    }
+
     $cart->delete();
 
     return back()->with('delete_cart_success', 'Product removed from cart successfully!');

@@ -66,7 +66,9 @@ class UserController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function update(Request $request, $id) {
-    if (auth()->user()->id != $id) {
+    $user = User::find($id);
+
+    if (auth()->user()->cannot('update', $user)) {
       return back()->with('unauthorized', 'Unauthorized access!');
     }
 

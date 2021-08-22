@@ -141,7 +141,7 @@
                                         <i class="fas fa-user"></i> {{ $comment->user->username }} &nbsp;
                                         <i class="fas fa-star"></i>
                                         {{ findRatingForProductFromUser($comment->user, $product) }} / 10
-                                        @if (auth()->user() && auth()->user()->id == $comment->user->id)
+                                        @can(['update'], $comment)
                                             <button data-comment-id="{{ $comment->id }}"
                                                 class="btn btn-sm btn-warning edit-comment-btn">Edit</button>
                                             <!-- Button trigger modal -->
@@ -158,8 +158,8 @@
                                                             <h5 class="modal-title" id="exampleModalLabel">Are you sure
                                                                 that
                                                                 you want to delete this comment?</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                                aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-footer">
                                                             <form class="d-inline"
@@ -175,7 +175,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        @endif
+                                        @endcan
                                     </h5>
                                     <p data-comment-id="{{ $comment->id }}"
                                         class="comment-body-p-focus card-text mt-2 comment-body-p-{{ $comment->id }}">

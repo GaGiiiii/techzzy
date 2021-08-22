@@ -92,8 +92,8 @@ class CommentController extends Controller {
       return back()->with('unauthorized', 'Unauthorized access!');
     }
 
-    if ($comment->user->id != auth()->user()->id) {
-      return back()->with('unauthorized', 'Unauthorized access!');
+    if (auth()->user()->cannot('update', $comment)) {
+      return response(['message' => 'Unauthorized access!'], 401);
     }
 
     $comment->body = $request->data;
@@ -109,15 +109,14 @@ class CommentController extends Controller {
    * @return \Illuminate\Http\Response
    */
   public function destroy($comment_id) {
-    foreach (auth()->user()->comments as $comment) {
-      if ($comment->id == $comment_id) {
-        $comment = Comment::find($comment_id);
-        $comment->delete();
+    $comment = Comment::find($comment_id);
 
-        return back()->with('delete_comment_success', 'Comment deleted successfully!');
-      }
+    if (auth()->user()->cannot('delete', $comment)) {
+      return back()->with('unauthorized', 'Unauthorized access!');
     }
 
-    return back()->with('unauthorized', 'Unauthorized access!');
+    $comment->delete();
+
+    return back()->with('delete_comment_success', 'Comment deleted successfully!');
   }
 }

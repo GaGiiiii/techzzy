@@ -85,12 +85,14 @@ class RatingController extends Controller {
     // NOT TO CREATE NEW
     $rating = Rating::find($id);
 
-    if ($rating) {
-      $rating->rating = $request->rating;
-      $rating->save();
-
-      return back()->with('add_rating_success', 'Rating sent successfully!');
+    if (auth()->user()->cannot('update', $rating)) {
+      return back()->with('unauthorized', 'Unauthorized access!');
     }
+
+    $rating->rating = $request->rating;
+    $rating->save();
+
+    return back()->with('add_rating_success', 'Rating sent successfully!');
   }
 
   /**

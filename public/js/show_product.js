@@ -104,14 +104,15 @@ function updateComment(commentID, data, commentBtn, commentP) {
   axios.put(`${origin}/comments/${commentID}`, {
     data,
   }).then(res => {
-    let divAlert = document.createElement('div');
-    divAlert.classList.add('alert', 'alert-success', 'alert-dismissible', 'fade', 'show', 'comment-alert');
-    divAlert.innerHTML = `Comment updated successfully. :)
-    <button type="button" class="btn-close" data-bs-dismiss="alert"
-        aria-label="Close"></button>`;
-    divAlert.setAttribute("role", "alert");
-    document.querySelector(`div[data-comment-id="${commentID}"].comment-body`).prepend(divAlert);
-  }).catch(err => console.log(err));
+    createAlert('alert-success', "Comment updated successfully. :)", document.querySelector(`div[data-comment-id="${commentID}"].comment-body`));
+  }).catch(error => {
+    console.log(error.response.data);
+    console.log(error.response.status);
+    console.log(error.response.headers);
+    if (error.response.status === 401) {
+      createAlert('alert-danger', error.response.data.message, document.querySelector(`div[data-comment-id="${commentID}"].comment-body`));
+    }
+  });
 }
 
 
@@ -180,6 +181,7 @@ addToCartBtn.addEventListener('click', () => {
         data,
       }).then(res => {
         crtid.dataset.crt = res.data.id;
+        createAlert("alert-success", "Added to cart.", document.querySelector('main'), true);
       }).catch(err => console.log(err));
 
       break;
@@ -189,9 +191,34 @@ addToCartBtn.addEventListener('click', () => {
       addToCartBtn.dataset.status = "add";
 
       axios.delete(origin + "/carts/" + crtid.dataset.crt).then(res => {
+        createAlert("alert-success", "Removed from cart.", document.querySelector('main'), true);
       }).catch(err => console.log(err));
 
       break;
   }
 
 });
+
+function createAlert(type, message, parent, cart = false) {
+  // Type - alert-success | alert-danger
+  let divAlert = document.createElement('div');
+  divAlert.classList.add('alert', type, 'alert-dismissible', 'fade', 'show', 'comment-alert');
+  divAlert.innerHTML = `${message}
+  <button type="button" class="btn-close" data-bs-dismiss="alert"
+      aria-label="Close"></button>`;
+  divAlert.setAttribute("role", "alert");
+  if (cart) {
+    removeShownAlerts();
+    divAlert.classList.add('mt-5');
+    parent.insertBefore(divAlert, document.querySelector("main").firstChild);
+  } else {
+    parent.prepend(divAlert);
+  }
+}
+
+function removeShownAlerts() {
+  let alerts = document.querySelectorAll('.alert');
+  alerts.forEach(alert => {
+    alert.remove();
+  })
+}
