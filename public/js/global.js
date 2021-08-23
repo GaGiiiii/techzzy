@@ -44,6 +44,10 @@ searchInput.addEventListener('keyup', () => {
       </a>`;
     });
 
+    if(html == ""){
+      html = "No results found";
+    }
+
     searchResultsDiv.innerHTML = html;
     searchResultsDiv.style.display = "block";
   }).catch(error => {

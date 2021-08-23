@@ -48,7 +48,7 @@ ul li a.cart .cart-basket {
   background-color: black;
   color: white;
   display: none;
-  height: 400px;
+  max-height: 400px;
   overflow-y: scroll;
 }
 
