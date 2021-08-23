@@ -83,4 +83,26 @@ class ProductController extends Controller {
       'cartForUserForThisProduct' => $cartForUserForThisProduct ?? null,
     ]);
   }
+
+   /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
+  public function search(Request $request) {
+    $enteredText = $request->data['enteredText'];
+    // $products = Product::where('name', 'like', "%$enteredText%")->get();
+    $products = DB::select("SELECT *, p.name AS product_name, p.id AS product_id FROM `products` p 
+    JOIN `categories` c ON c.id = p.category_id
+    JOIN (SELECT r.product_id, AVG(r.rating) AS RATING FROM `ratings` r GROUP BY r.product_id) t2 ON p.id = t2.product_id
+    WHERE p.name LIKE '%$enteredText%'");
+
+  // JOIN (SELECT r.product_id, AVG(r.rating) AS RATING FROM `ratings` r GROUP BY r.product_id) t2 ON p.id = t2.product_id
+
+    // $mostLikedProductsV = DB::select("SELECT * FROM `products` p JOIN
+    // -- (SELECT r.product_id, AVG(r.rating) AS RATING FROM `ratings` r GROUP BY r.product_id) t2 ON p.id = t2.product_id ORDER BY t2.RATING DESC");
+
+    return $products;
+  }
 }

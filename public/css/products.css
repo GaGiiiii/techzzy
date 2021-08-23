@@ -17,12 +17,3 @@
 .pagination {
   justify-content: center;
 }
-
-#search{
-  margin-left: auto;
-}
-
-#search input{
-  width: 285px;
-  margin-left: auto;
-}

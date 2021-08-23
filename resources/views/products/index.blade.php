@@ -5,9 +5,7 @@
     </x-slot>
 
     <div class="row mt-5">
-        <div id="search" class="mb-3">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        </div>
+
         <div class="col-2">
             <div class="card filters shadow">
                 <div id="sort">

@@ -1,4 +1,4 @@
-let origin = window.location.origin;   // Returns base URL (https://example.com)
+origin = window.location.origin;   // Returns base URL (https://example.com)
 
 let liMinus = document.querySelector('.li-minus');
 let liCurrent = document.querySelector('.li-current');
@@ -120,9 +120,11 @@ function updateComment(commentID, data, commentBtn, commentP) {
 
 let rateStars = document.querySelectorAll('.rate-star');
 let ratingInput = document.querySelector(`input[name="rating"]`);
-let originalUsersRating = ratingInput.value;
+if(ratingInput){
+  let originalUsersRating = ratingInput.value;
+  initStars();
+}
 
-initStars();
 
 rateStars.forEach((rateStar, index) => {
   rateStar.addEventListener('mouseover', () => {
