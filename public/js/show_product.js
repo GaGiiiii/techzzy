@@ -120,8 +120,9 @@ function updateComment(commentID, data, commentBtn, commentP) {
 
 let rateStars = document.querySelectorAll('.rate-star');
 let ratingInput = document.querySelector(`input[name="rating"]`);
-if(ratingInput){
-  let originalUsersRating = ratingInput.value;
+let originalUsersRating;
+if (ratingInput) {
+  originalUsersRating = ratingInput.value;
   initStars();
 }
 
