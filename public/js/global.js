@@ -4,6 +4,10 @@ let origin = window.location.origin;   // Returns base URL (https://example.com)
 let searchInput = document.querySelector('#search input');
 let searchResultsDiv = document.querySelector('#search-results');
 
+searchInput.addEventListener('change', () => {
+  console.log("A");
+});
+
 searchInput.addEventListener('keyup', () => {
   let enteredText = searchInput.value;
 
@@ -29,7 +33,7 @@ searchInput.addEventListener('keyup', () => {
       html += `<a href="${origin}/products/${foundProduct.product_id}">
           <div class="search-result-item">
               <div class="search-result-item-img">
-                  <img src="${foundProduct.img}" alt="">
+                  <img src="${foundProduct.img != 'no_image.png' ? foundProduct.img : origin + '/images/no_image.png'}" alt="">
               </div>
               <div class="search-result-item-info">
                   <p>${foundProduct.product_name} | ${foundProduct.name}</p>
@@ -48,3 +52,4 @@ searchInput.addEventListener('keyup', () => {
     console.log(error.response.headers);
   });
 });
+

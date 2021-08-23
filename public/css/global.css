@@ -36,6 +36,10 @@ ul li a.cart .cart-basket {
   position: relative;
 }
 
+#search input::-webkit-search-cancel-button{
+  display: none;
+}
+
 #search-results{
   position: absolute;
   width: 100%;
@@ -44,11 +48,16 @@ ul li a.cart .cart-basket {
   background-color: black;
   color: white;
   display: none;
+  height: 400px;
+  overflow-y: scroll;
 }
 
 .search-result-item{
   display: flex;
-  padding: 5px;
+  margin: 10px;
+  border-bottom: 1px solid white;
+  /* margin-bottom: 10px; */
+  padding-bottom: 15px;
 }
 
 .search-result-item-info{
