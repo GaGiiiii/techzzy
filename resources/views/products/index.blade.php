@@ -11,12 +11,12 @@
                 <div id="sort">
                     <h4 class="mb-2">Sort by:</h4>
                     <select class="form-select ps-2" name="sortBy" aria-label="Default select example">
-                        <option selected>Name</option>
-                        <option value="1">Price desc</option>
-                        <option value="2">Price asc</option>
-                        <option value="3">Ratings</option>
-                        <option value="3">Comments</option>
-                        <option value="3">Popularity</option>
+                        <option selected value="name">Name</option>
+                        <option value="price">Price desc</option>
+                        <option value="price2">Price asc</option>
+                        <option value="ratings">Ratings</option>
+                        <option value="comments">Comments</option>
+                        <option value="popularity">Popularity</option>
                     </select>
                 </div>
                 <div id="price" class="mt-3">
