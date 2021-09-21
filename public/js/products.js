@@ -35,9 +35,9 @@ function sendFilters() {
   }
 
   const params = new URLSearchParams(window.location.search);
-  const page = params.has('page') ? params.get('page') : 1;
+  // const page = params.has('page') ? params.get('page') : 1;
 
-  let url = `${origin}/products?page=${page}&sort=${selectSort.value}&price=${priceRange.value}`;
+  let url = `${origin}/products?page=1&sort=${selectSort.value}&price=${priceRange.value}`;
 
   console.log(selectedCategories);
 
