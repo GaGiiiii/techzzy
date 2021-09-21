@@ -11,24 +11,26 @@
                 <div id="sort">
                     <h4 class="mb-2">Sort by:</h4>
                     <select class="form-select ps-2" name="sortBy" aria-label="Default select example">
-                        <option selected value="name">Name</option>
-                        <option value="price">Price desc</option>
-                        <option value="price2">Price asc</option>
-                        <option value="ratings">Ratings</option>
-                        <option value="comments">Comments</option>
-                        <option value="popularity">Popularity</option>
+                        <option {{ $sortType == 'name' ? 'selected' : '' }} value="name">Name</option>
+                        <option {{ $sortType == 'price' ? 'selected' : '' }} value="price">Price desc</option>
+                        <option {{ $sortType == 'price2' ? 'selected' : '' }} value="price2">Price asc</option>
+                        <option {{ $sortType == 'ratings' ? 'selected' : '' }} value="ratings">Ratings</option>
+                        <option {{ $sortType == 'comments' ? 'selected' : '' }} value="comments">Comments</option>
+                        {{-- <option {{ $sortType == 'popularity' ? 'selected' : '' }} value="popularity">Popularity</option> --}}
                     </select>
                 </div>
                 <div id="price" class="mt-3">
                     <h4>Price range</h4>
-                    <input type="range" min="0" max="1000000" class="form-range" id="customRange1" name="price-range">
+                    <span class="price-range-span">0 - {{ $priceRange }} RSD</span>
+                    <input type="range" min="0" max="1000000" class="form-range" id="customRange1" name="price-range"
+                        value={{ $priceRange }}>
                 </div>
                 <div id="categories" class="mt-2">
                     <h4 class="mb-2">Cetegory</h4>
                     @foreach ($categories as $category)
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="category"
-                                value="{{ $category->name }}">
+                            <input disabled class="form-check-input" type="checkbox" name="category"
+                                value="{{ $category->name }}" {{existsInCategories($category->name, $categoriesQueryParams) ? "checked" : ""}}>
                             <label class="form-check-label" for="flexCheckDefault">
                                 {{ $category->name }}
                             </label>
@@ -55,7 +57,8 @@
                                             / 10
                                         </p>
                                         <p class="fw-bold">
-                                            <i class="fas fa-tag"></i> {{ number_format($product->price, 2) }} RSD
+                                            <i class="fas fa-tag"></i> {{ number_format($product->price, 2) }}
+                                            RSD
                                         </p>
                                     </div>
                                 </div>
@@ -64,7 +67,7 @@
                     @endforeach
                 </div>
                 <div id="pagination" class="mt-5">
-                    {{ $products->links() }}
+                    {{ $products->withQueryString()->links() }}
                 </div>
             </div>
         </div>

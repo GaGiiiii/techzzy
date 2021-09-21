@@ -45,7 +45,7 @@
   padding-bottom: 20px;
 }
 
-.rate-star:hover{
+.rate-star:hover {
   cursor: pointer;
 }
 
@@ -53,6 +53,11 @@
   display: none;
 } */
 
-.comment-body-p-focus:focus{
+.comment-body-p-focus:focus {
   padding: 15px;
+}
+
+.comment-body p {
+  word-break: break-word;
+  text-align: justify;
 }

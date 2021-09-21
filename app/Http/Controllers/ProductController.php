@@ -16,9 +16,10 @@ class ProductController extends Controller {
    */
   public function index() {
     $products = Product::all()->take(20);
+    $allProducts = Product::all();
 
     // OPTION ONE
-    $mostCommentedProductsV = mostCommentedProducts($products);
+    $mostCommentedProductsV = mostCommentedProducts($allProducts);
     $mostCommentedProductsV = $mostCommentedProductsV->slice(0, 20);
 
     // OPTION TWO
@@ -39,13 +40,77 @@ class ProductController extends Controller {
    *
    * @return \Illuminate\Http\Response
    */
-  public function index2() {
-    $products = Product::orderBy('name')->paginate(16);
+  public function index2(Request $request) {
+    $sortType = $request->query('sort') ?? 'name';
+    $priceRange = $request->query('price') ?? 500000;
+    $categoriesQueryParams = $request->query('categories') ?? null;
+    $arrayOfIDs = [];
+
+    if (isset($categoriesQueryParams)) {
+      $categoriesQueryParams = explode(",", $categoriesQueryParams);
+
+      // Need to find ID's based on category names
+      $categoryModels = Category::select('id')->whereIn('name', $categoriesQueryParams)->get()->toArray();
+
+      foreach ($categoryModels as $categoryModel) {
+        array_push($arrayOfIDs, $categoryModel['id']);
+      }
+    }
+
+    switch ($sortType) {
+      case 'price':
+        if (!empty($arrayOfIDs)) {
+          $products = Product::where('price', '<', $priceRange)->whereIn('category_id', $arrayOfIDs)->orderBy($sortType, "DESC")->paginate(16);
+        } else {
+          $products = Product::where('price', '<', $priceRange)->orderBy($sortType, "DESC")->paginate(16);
+        }
+        break;
+      case 'price2':
+        if (!empty($arrayOfIDs)) {
+          $products = Product::where('price', '<', $priceRange)->whereIn('category_id', $arrayOfIDs)->orderBy('price', "ASC")->paginate(16);
+        } else {
+          $products = Product::where('price', '<', $priceRange)->orderBy('price', "ASC")->paginate(16);
+        }
+        break;
+      case 'name':
+        if (!empty($arrayOfIDs)) {
+          $products = Product::where('price', '<', $priceRange)->whereIn('category_id', $arrayOfIDs)->orderBy($sortType)->paginate(16);
+        } else {
+          $products = Product::where('price', '<', $priceRange)->orderBy($sortType)->paginate(16);
+        }
+        break;
+      case 'comments':
+        if (!empty($arrayOfIDs)) {
+          $products = mostCommentedProducts(Product::where('price', '<', $priceRange)->whereIn('category_id', $arrayOfIDs)->get());
+        } else {
+          $products = mostCommentedProducts(Product::where('price', '<', $priceRange)->get());
+        }
+        $products = paginate($products, 16, null, ['path' => 'http://localhost:8000/products']);
+        break;
+      case 'ratings':
+        if (!empty($arrayOfIDs)) {
+          $products = mostLikedProducts(Product::where('price', '<', $priceRange)->whereIn('category_id', $arrayOfIDs)->get());
+        } else {
+          $products = mostLikedProducts(Product::where('price', '<', $priceRange)->get());
+        }
+        $products = paginate($products, 16, null, ['path' => 'http://localhost:8000/products']);
+        break;
+      default:
+        if (!empty($arrayOfIDs)) {
+          $products = Product::where('price', '<', $priceRange)->whereIn('category_id', $arrayOfIDs)->orderBy('name')->paginate(16);
+        } else {
+          $products = Product::where('price', '<', $priceRange)->orderBy('name')->paginate(16);
+        }
+    }
+
     $categories = Category::all();
 
     return view('products.index', [
       'products' => $products,
       'categories' => $categories,
+      'categoriesQueryParams' => $categoriesQueryParams,
+      'sortType' => $sortType,
+      'priceRange' => $priceRange,
     ]);
   }
 
@@ -84,7 +149,7 @@ class ProductController extends Controller {
     ]);
   }
 
-   /**
+  /**
    * Display the specified resource.
    *
    * @param  int  $id
@@ -98,7 +163,7 @@ class ProductController extends Controller {
     JOIN (SELECT r.product_id, AVG(r.rating) AS RATING FROM `ratings` r GROUP BY r.product_id) t2 ON p.id = t2.product_id
     WHERE p.name LIKE '%$enteredText%'");
 
-  // JOIN (SELECT r.product_id, AVG(r.rating) AS RATING FROM `ratings` r GROUP BY r.product_id) t2 ON p.id = t2.product_id
+    // JOIN (SELECT r.product_id, AVG(r.rating) AS RATING FROM `ratings` r GROUP BY r.product_id) t2 ON p.id = t2.product_id
 
     // $mostLikedProductsV = DB::select("SELECT * FROM `products` p JOIN
     // -- (SELECT r.product_id, AVG(r.rating) AS RATING FROM `ratings` r GROUP BY r.product_id) t2 ON p.id = t2.product_id ORDER BY t2.RATING DESC");

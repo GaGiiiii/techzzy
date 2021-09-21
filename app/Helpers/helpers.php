@@ -1,5 +1,9 @@
 <?php
 
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+
 function mostCommentedProducts($products) {
   for ($i = 0; $i < sizeof($products) - 1; $i++) {
     for ($j = $i + 1; $j < sizeof($products); $j++) {
@@ -10,6 +14,32 @@ function mostCommentedProducts($products) {
         $help = $products[$i];
         $products[$i] = $products[$j];
         $products[$j] = $help;
+      }
+    }
+  }
+
+  return $products;
+}
+
+function existsInCategories($categoryName, $categories) {
+  if (isset($categories)) {
+    for ($i = 0; $i < sizeof($categories); $i++) {
+      if ($categories[$i] == $categoryName) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function mostLikedProducts($products) {
+  for ($i = 0; $i < sizeof($products) - 1; $i++) {
+    for ($j = $i + 1; $j < sizeof($products); $j++) {
+      if (calculateRatingForProduct($products[$i]) < calculateRatingForProduct($products[$j])) {
+        $help = $products[$j];
+        $products[$j] = $products[$i];
+        $products[$i] = $help;
       }
     }
   }
@@ -43,4 +73,11 @@ function findRatingForProductFromUser($user, $product) {
   }
 
   return 0;
+}
+
+function paginate($items, $perPage = 15, $page = null, $options = []) {
+  $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+  $items = $items instanceof Collection ? $items : Collection::make($items);
+
+  return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
 }
