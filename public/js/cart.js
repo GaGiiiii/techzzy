@@ -1,4 +1,4 @@
-let origin = window.location.origin;   // Returns base URL (https://example.com)
+// let origin = window.location.origin;   // Returns base URL (https://example.com)
 
 let liMinuses = document.querySelectorAll('.li-minus');
 let liCurrents = document.querySelectorAll('.li-current');
